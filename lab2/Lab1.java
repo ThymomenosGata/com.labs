@@ -43,28 +43,11 @@ public class Lab1 {
 		System.out.println("Площадь стороны " + str + " равна: " + result);
 	}
 
-	public static double computeAreaX(Point3d firstPoint, Point3d secondPoint, Point3d thridPoint) {
+	public static double computeArea(Point3d firstPoint, Point3d secondPoint, Point3d thridPoint) {
 		return Math.sqrt(
-			(firstPoint.getX() + secondPoint.getX() + thridPoint.getX()) * 
-			(- firstPoint.getX() + secondPoint.getX() + thridPoint.getX()) * 
-			(firstPoint.getX() - secondPoint.getX() + thridPoint.getX()) * 
-			(firstPoint.getX() + secondPoint.getX() - thridPoint.getX())) / 4;
+			(firstPoint.distanceTo(secondPoint) + secondPoint.distanceTo(thridPoint) + thridPoint.distanceTo(firstPoint)) * 
+			(- firstPoint.distanceTo(secondPoint) + secondPoint.distanceTo(thridPoint) + thridPoint.distanceTo(firstPoint)) * 
+			(firstPoint.distanceTo(secondPoint) - secondPoint.distanceTo(thridPoint) + thridPoint.distanceTo(firstPoint)) * 
+			(firstPoint.distanceTo(secondPoint) + secondPoint.distanceTo(thridPoint) - thridPoint.distanceTo(firstPoint))) / 4;
 	}
-
-	public static double computeAreaY(Point3d firstPoint, Point3d secondPoint, Point3d thridPoint) {
-		return Math.sqrt(
-			(firstPoint.getY() + secondPoint.getY() + thridPoint.getY()) * 
-			(- firstPoint.getY() + secondPoint.getY() + thridPoint.getY()) * 
-			(firstPoint.getY() - secondPoint.getY() + thridPoint.getY()) * 
-			(firstPoint.getY() + secondPoint.getY() - thridPoint.getY())) / 4;
-	}
-
-	public static double computeAreaZ(Point3d firstPoint, Point3d secondPoint, Point3d thridPoint) {
-		return Math.sqrt(
-			(firstPoint.getZ() + secondPoint.getZ() + thridPoint.getZ()) * 
-			(- firstPoint.getZ() + secondPoint.getZ() + thridPoint.getZ()) * 
-			(firstPoint.getZ() - secondPoint.getZ() + thridPoint.getZ()) * 
-			(firstPoint.getZ() + secondPoint.getZ() - thridPoint.getZ())) / 4;
-	}
-
 } 
