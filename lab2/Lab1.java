@@ -1,53 +1,73 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Lab1 {
-	public static void main(String[] argv) {
-		printEnterPoint(1);
-		Point3d firstPoint = getPoint();
+    public static void main(String[] argv) {
 
-		printEnterPoint(2);
-		Point3d secondPoint = getPoint();
+        String points = readFile();
+        String areas = "";
+        String[] threePoints = points.split("!");
+        for (String point : threePoints) {
+            String[] coordinates = point.split(",");
+            if (coordinates.length == 9) {
+                Point3D firstPoint = new Point3D(Double.valueOf(threePoints[0]), Double.valueOf(threePoints[1]), Double.valueOf(threePoints[2]));
+                Point3D secondPoint = new Point3D(Double.valueOf(threePoints[3]), Double.valueOf(threePoints[4]), Double.valueOf(threePoints[5]));
+                Point3D thridPoint = new Point3D(Double.valueOf(threePoints[6]), Double.valueOf(threePoints[7]), Double.valueOf(threePoints[8]));
+                if (firstPoint.equals(secondPoint)) {
+                    Error();
+                } else if (secondPoint.equals(thridPoint)) {
+                    Error();
+                } else if (firstPoint.equals(thridPoint)) {
+                    Error();
+                } else {
+                    areas += computeArea(firstPoint, secondPoint, thridPoint) + "\n";
+                }
+            }
+        }
 
-		printEnterPoint(3);
-		Point3d thridPoint = getPoint();
+        writeFile(areas);
 
-		if (firstPoint.equals(secondPoint) || secondPoint.equals(thridPoint) || firstPoint.equals(thridPoint)) {
-			printError();
-		} else {
-			printResult("X", computeAreaX(firstPoint, secondPoint, thridPoint));
-			printResult("Y", computeAreaY(firstPoint, secondPoint, thridPoint));
-			printResult("Z", computeAreaZ(firstPoint, secondPoint, thridPoint));
-		}
-	}
+    }
 
-	public static Point3d getPoint() {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("x: ");
-		double x = scanner.nextDouble();
-		System.out.println("y: ");
-		double y = scanner.nextDouble();
-		System.out.println("z: ");
-		double z = scanner.nextDouble();
-		return new Point3d(x, y, z);
-	}
+    private static String readFile() {
+        String everything = "";
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("/Users/mac/IdeaProjects/Point3D/src/file.txt"));
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            everything = sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return everything;
+    }
 
-	public static void printError() {
-		System.out.println("Не может быть 2-х равных точек");
-	}
+    private static void writeFile(String str) {
+        try{
+            FileWriter writer = new FileWriter("areas.txt", false);
+            writer.write(str);
+            writer.flush();
+        } catch(IOException ex){
+            System.out.println(ex.getMessage());
+        }
+    }
 
-	public static void printEnterPoint(int n) {
-		System.out.println("Введите " + n + " точку");
-	}
+    private static void Error() {
+        System.out.println("Не должно быть равных точек");
+    }
 
-	public static void printResult(String str, double result) {
-		System.out.println("Площадь стороны " + str + " равна: " + result);
-	}
-
-	public static double computeArea(Point3d firstPoint, Point3d secondPoint, Point3d thridPoint) {
-		return Math.sqrt(
-			(firstPoint.distanceTo(secondPoint) + secondPoint.distanceTo(thridPoint) + thridPoint.distanceTo(firstPoint)) * 
-			(- firstPoint.distanceTo(secondPoint) + secondPoint.distanceTo(thridPoint) + thridPoint.distanceTo(firstPoint)) * 
-			(firstPoint.distanceTo(secondPoint) - secondPoint.distanceTo(thridPoint) + thridPoint.distanceTo(firstPoint)) * 
-			(firstPoint.distanceTo(secondPoint) + secondPoint.distanceTo(thridPoint) - thridPoint.distanceTo(firstPoint))) / 4;
-	}
+    private static double computeArea(Point3D firstPoint, Point3D secondPoint, Point3D thridPoint) {
+        return Math.sqrt(
+                (firstPoint.distanceTo(secondPoint) + secondPoint.distanceTo(thridPoint) + thridPoint.distanceTo(firstPoint)) *
+                        (-firstPoint.distanceTo(secondPoint) + secondPoint.distanceTo(thridPoint) + thridPoint.distanceTo(firstPoint)) *
+                        (firstPoint.distanceTo(secondPoint) - secondPoint.distanceTo(thridPoint) + thridPoint.distanceTo(firstPoint)) *
+                        (firstPoint.distanceTo(secondPoint) + secondPoint.distanceTo(thridPoint) - thridPoint.distanceTo(firstPoint))) / 4;
+    }
 } 
